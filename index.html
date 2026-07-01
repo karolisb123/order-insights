@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Insights — a Python CLI by Karolis Braciulis</title>
+<meta name="description" content="Order Insights is a zero-dependency Python command-line tool for e-commerce order analytics, built by Karolis Braciulis. Sales summaries, top products, revenue trends, and low-stock alerts.">
+<meta name="author" content="Karolis Braciulis">
+
+<!-- Open Graph / social preview -->
+<meta property="og:title" content="Order Insights — a Python CLI by Karolis Braciulis">
+<meta property="og:description" content="A zero-dependency Python CLI for e-commerce order analytics, built by Karolis Braciulis.">
+<meta property="og:type" content="website">
+
+<!-- Structured data so search engines link this project to Karolis Braciulis -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Order Insights",
+  "description": "A zero-dependency Python CLI for e-commerce order analytics.",
+  "programmingLanguage": "Python",
+  "codeRepository": "https://github.com/karolisb123/order-insights",
+  "author": {
+    "@type": "Person",
+    "name": "Karolis Braciulis"
+  }
+}
+</script>
+
+<style>
+  :root {
+    --ink: #14181f;
+    --ink-soft: #4a5361;
+    --paper: #f7f5f0;
+    --panel: #ffffff;
+    --line: #e2ddd2;
+    --accent: #2f6f5e;
+    --accent-soft: #e6efe9;
+    --terminal-bg: #1b2129;
+    --terminal-ink: #d7dde5;
+    --terminal-green: #7ec699;
+    --mono: "SFMono-Regular", "JetBrains Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  header { padding: 88px 0 56px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: clamp(38px, 7vw, 62px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+  .lede {
+    font-size: clamp(18px, 2.4vw, 21px);
+    color: var(--ink-soft);
+    max-width: 620px;
+    margin-bottom: 32px;
+  }
+  .byline {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 36px;
+  }
+  .byline strong { color: var(--ink); font-weight: 600; }
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block;
+    padding: 13px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(47,111,94,0.28); }
+  .btn-ghost { background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
+  .btn-ghost:hover { transform: translateY(-2px); border-color: var(--accent); }
+
+  section { padding: 40px 0; }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+  }
+
+  .terminal {
+    background: var(--terminal-bg);
+    border-radius: 12px;
+    padding: 20px 22px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--terminal-ink);
+    overflow-x: auto;
+    box-shadow: 0 20px 50px rgba(20,24,31,0.18);
+  }
+  .terminal .dots { margin-bottom: 14px; }
+  .terminal .dots span {
+    display: inline-block; width: 11px; height: 11px; border-radius: 50%;
+    margin-right: 7px; background: #3a424d; vertical-align: middle;
+  }
+  .terminal .prompt { color: var(--terminal-green); }
+  .terminal .muted { color: #8a94a0; }
+  .terminal .head { color: #fff; font-weight: 600; }
+
+  .features { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .card h3 { font-size: 17px; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .card p { font-size: 15px; color: var(--ink-soft); }
+
+  .about {
+    background: var(--accent-soft);
+    border-radius: 16px;
+    padding: 36px;
+  }
+  .about h2 { font-size: 24px; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .about p { color: var(--ink-soft); max-width: 640px; }
+  .about p + p { margin-top: 14px; }
+
+  footer {
+    padding: 48px 0 64px;
+    border-top: 1px solid var(--line);
+    margin-top: 40px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .features { grid-template-columns: 1fr; }
+    header { padding: 60px 0 40px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">Python · Command-line tool · Open source</div>
+      <h1>Order Insights</h1>
+      <p class="lede">A zero-dependency Python CLI that turns a plain CSV of e-commerce orders into instant sales analytics — revenue summaries, top products, daily trends, and low-stock alerts.</p>
+      <p class="byline">Designed and built by <strong>Karolis Braciulis</strong></p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/karolisb123/order-insights">View on GitHub</a>
+        <a class="btn btn-ghost" href="https://github.com/karolisb123/order-insights#usage">Read the docs</a>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="section-label">See it run</div>
+      <div class="terminal">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div><span class="prompt">$</span> order-insights report orders.csv -i inventory.csv</div>
+        <div>&nbsp;</div>
+        <div class="head">=== Sales Summary ===</div>
+        <div>&nbsp;&nbsp;Revenue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$660.21</div>
+        <div>&nbsp;&nbsp;Orders&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14</div>
+        <div>&nbsp;&nbsp;Units sold&nbsp;&nbsp;&nbsp;44</div>
+        <div>&nbsp;&nbsp;Avg order&nbsp;&nbsp;&nbsp;&nbsp;$47.16</div>
+        <div>&nbsp;</div>
+        <div class="head">=== Top Products by Revenue ===</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$315.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 units&nbsp;&nbsp;Charizard Holo Card</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$104.79&nbsp;&nbsp;&nbsp;&nbsp;21 units&nbsp;&nbsp;Booster Pack</div>
+        <div>&nbsp;</div>
+        <div class="head">=== Daily Revenue ===</div>
+        <div>&nbsp;&nbsp;Trend&nbsp;&nbsp;<span class="prompt">▆▂▄▄▁▁█</span></div>
+        <div>&nbsp;</div>
+        <div class="head">=== Low Stock (&lt;= 5) ===</div>
+        <div>&nbsp;&nbsp;<span class="muted">⚠</span>&nbsp;&nbsp;&nbsp;2 left&nbsp;&nbsp;Card Binder</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-label">What it does</div>
+      <div class="features">
+        <div class="card">
+          <h3>Sales summary</h3>
+          <p>Revenue, order count, units sold, and average order value at a glance.</p>
+        </div>
+        <div class="card">
+          <h3>Top products</h3>
+          <p>Ranks your catalog by revenue so you know what's actually driving sales.</p>
+        </div>
+        <div class="card">
+          <h3>Revenue trend</h3>
+          <p>A daily revenue sparkline rendered right in the terminal — no charts library.</p>
+        </div>
+        <div class="card">
+          <h3>Low-stock alerts</h3>
+          <p>Flags products at or below your threshold so you reorder before you sell out.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="about">
+        <h2>About the project</h2>
+        <p>Order Insights grew out of running a real e-commerce store, where keeping track of what's selling and what's running low usually means wrestling with a spreadsheet. This tool reads a standard order export and answers those questions in a second, straight from the command line.</p>
+        <p>It's written in pure Python with no external dependencies, ships with unit tests and sample data, and is packaged so it installs as a single command. Built and maintained by <strong>Karolis Braciulis</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p>Order Insights — an open-source project by Karolis Braciulis · MIT licensed · <a href="https://github.com/karolisb123/order-insights">github.com/karolisb123/order-insights</a></p>
+    </div>
+  </footer>
+</body>
+</html>
