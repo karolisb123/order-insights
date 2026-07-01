@@ -1,3 +1,5 @@
+-Karolis Braciulis
+
 # Order Insights
 
 A tiny, zero-dependency Python CLI for analyzing e-commerce orders from a CSV file.
