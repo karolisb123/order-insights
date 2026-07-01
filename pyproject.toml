@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "order-insights"
+version = "0.1.0"
+description = "A tiny zero-dependency CLI for analyzing e-commerce orders from CSV."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+keywords = ["cli", "ecommerce", "analytics", "csv", "inventory"]
+
+[project.scripts]
+order-insights = "order_insights.cli:main"
+
+[tool.setuptools]
+packages = ["order_insights"]
